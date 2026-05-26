@@ -1,0 +1,28 @@
+clear;
+closeall;
+
+monitor="monitor_top_10nm";
+
+Ez = getdata(monitor, "Ez");
+Ez1 = pinch(Ez,4,40); Ez1 = pinch(Ez1,3,1);
+
+f=getdata(monitor,"f");
+
+x = getdata(monitor,"x");
+y = getdata(monitor,"y");
+nx=length(x);
+ny=length(y);
+X=meshgridx(x,y);
+Y=meshgridy(x,y);
+
+# plot spatial fields
+image(x*1e9,y*1e9,abs(Ez1)^2,"x (um)","y (um)","Ez^2");
+
+# period, ax is the lattice constant
+ax=150e-9;
+nczt=2*500;
+kx = linspace(-1*pi/ax,1*pi/ax,nczt);
+ky = linspace(0*pi/ax,1*pi/ax,nczt);
+
+Ezf1 = czt(Ez1,x,y,kx,ky)/max(abs(czt(Ez1,x,y,kx,ky)));
+image(kx,ky,abs(Ezf1)^2,"kx 1/nm","ky 1/nm","IFC");
