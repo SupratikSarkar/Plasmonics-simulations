@@ -1,0 +1,56 @@
+#########################################################
+#
+# Description:
+# 	This script performs a variety of simple
+#       far field calculations. 
+#
+#########################################################
+
+
+# run simulation
+clear;
+closeall;
+run; 
+
+#########################################################
+#       Perform the far field projection and image result
+E2 = farfield3d("monitor_top_600nm"); # this returns |E|^2 in the far field
+ux = farfieldux("monitor_top_600nm");
+uy = farfielduy("monitor_top_600nm");
+
+image(ux,uy,E2,"","","|E|^2 at 1 m","polar");
+
+
+#########################################################
+# 	Integrate power in the far field,
+#       normalized to the source power 
+
+# pause before running next portion of script
+
+
+# choose the half angle over which we will integrate
+half_angle = 45; #in degrees
+
+# choose the central angle of the cone
+cone_center_theta = 0;
+cone_center_phi = 0;
+
+# Display the half angle
+?"The half angle is: " + num2str(half_angle) + " degrees" +
+    " at (theta,phi)=("+num2str(cone_center_theta)+","+num2str(cone_center_phi)+")";
+
+
+# collect the far field data
+E2 = farfield3d("monitor_top_600nm"); # this returns |E|^2 in the far field
+ux = farfieldux("monitor_top_600nm");
+uy = farfielduy("monitor_top_600nm");
+
+
+# Method1
+temp_cone = farfield3dintegrate(E2,ux,uy,half_angle,cone_center_theta,cone_center_phi);
+temp_far  = farfield3dintegrate(E2,ux,uy);
+Tx = transmission("monitor_top_600nm");
+# get fraction of power in cone, then normalize with monitor transmission
+T=temp_cone/temp_far;#*transmission("monitor_top_600nm");
+?"  The normalized transmission by method 1 is: " + num2str(T*100) + " %";
+
