@@ -1,0 +1,29 @@
+monitor_name = "monitor_top_10nm";
+
+E = getelectric(monitor_name);
+
+Ex = getdata(monitor_name,"Ex");
+ExR = real(Ex);
+ExI = imag(Ex);
+
+Ey = getdata(monitor_name,"Ez");
+EyR = real(Ey);
+EyI = imag(Ey);
+
+#S0 = abs(Ex)^2 + abs(Ey)^2;
+#S1 = (abs(Ex)^2 - abs(Ey)^2)/E;
+#S2 = 2*(ExR*EyR + ExI*EyI)/E;
+#S3 = 2*(ExR*EyI - ExI*EyR)/E;
+
+S0 = abs(Ex)^2 + abs(Ey)^2;
+S1 = (abs(Ex)^2 - abs(Ey)^2);
+S2 = (ExR*EyR + ExI*EyI);
+S3 = (ExR*EyI - ExI*EyR);
+
+
+#visualize(S0);
+visualize(S3);
+visualize(S3*E);
+visualize(S3*S0);
+
+#visualize(R,T);
